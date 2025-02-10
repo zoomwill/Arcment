@@ -20,7 +20,6 @@ class PreProcessor():
     for processor in self.section_processors: 
       processor_type = processor.process_type()
       self.section_processors[processor_type].append(processor)
-      
     # Run processors in order
     # Order: TOP_COMMENT, STARTUP_SCRIPT, GCODE_MOVEMENTS, END_SCRIPT, BOTTOM_COMMENT
       
