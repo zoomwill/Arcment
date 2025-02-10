@@ -1,5 +1,6 @@
 from typing import List
 from collections import defaultdict
+from layer_parser import LayerParser
 from processor_interface import Sections, ProcessorInterface
 
 class PreProcessor():
@@ -16,7 +17,7 @@ class PreProcessor():
                     Sections.BOTTOM_COMMENT]
     
     self.gcode_sections = defaultdict(list)
-    self.section_processors = defaultdict(list) # Add default processors into this dict 
+    self.section_processors = [] # Add default processors into this list
     self.gcode_layers = []
     
     self.parse_sections()
@@ -44,11 +45,10 @@ class PreProcessor():
       current_index += 1
     
   def run_processors(self, processors: List[ProcessorInterface] = None):
-    """Runs the processors (Startup - End script only)
+    """Runs the processors (Startup - End script only) excluding layer parser
     Args:
       processors (List[ProcessorInterface], optional): _description_. If specified, will run only those processors.
                   Otherwise, will run all processors defeind in section_processors
-                  Processors must be in the format of [Sections.PROCESSORTYPE[ List[Processors] ]]
     """
     
     # Run processors in order
@@ -65,14 +65,16 @@ class PreProcessor():
       
       # Processes the section using the processors 
       for processor in processors:
-        section_gcode = processor.process(section_gcode)
+        if processor.type == section:
+          section_gcode = processor.process(section_gcode)
         
       processed_gcode.append(section_gcode)
       
     return processed_gcode
   
-    
-if __name__ == "__main__":
-  a = PreProcessor("test.gcode")
-  a.run_processors()
+  def parse_layers(self):
+    parser = LayerParser()
+    layers = parser.process(self.gcode_sections[Sections.GCODE_MOVEMENTS_SECTION])
+
+    return layers
     
