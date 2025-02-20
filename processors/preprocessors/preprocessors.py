@@ -1,14 +1,19 @@
 from typing import List
 from collections import defaultdict
-from layer_parser import LayerParser
-from processor_interface import Sections, ProcessorInterface
+from .layer_parser import LayerParser
+from .processor_interface import Sections, ProcessorInterface
 
 class PreProcessor():
   
   def __init__(self, gcode):
     
-    with open(gcode, 'r') as f: # Opens gcode file
-      self.gcode = f.readlines()
+    self.gcode = []
+    
+    with open(gcode, 'r', encoding='utf-8', errors='replace') as f:
+      for line in f:
+        self.gcode.append(line.strip())
+    
+    print(len(self.gcode))
       
     self.sections = [Sections.TOP_COMMENT_SECTION,
                     Sections.STARTUP_SCRIPT_SECTION,
@@ -21,6 +26,7 @@ class PreProcessor():
     self.gcode_layers = []
     
     self.parse_sections()
+    # print(self.parse_layers()[1])
     
   def parse_sections(self):
     """Parses the gcode into the different sections"""
@@ -75,6 +81,8 @@ class PreProcessor():
   def parse_layers(self):
     parser = LayerParser()
     layers = parser.process(self.gcode_sections[Sections.GCODE_MOVEMENTS_SECTION])
-
     return layers
+
+if __name__ == '__main__':
+  PreProcessor("test.gcode")
     

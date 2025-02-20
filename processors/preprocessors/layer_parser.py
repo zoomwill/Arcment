@@ -1,4 +1,4 @@
-from processor_interface import Sections, ProcessorInterface
+from .processor_interface import Sections, ProcessorInterface
 
 class LayerParser(ProcessorInterface):
 
