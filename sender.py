@@ -5,6 +5,7 @@ from processors.preprocessors.preprocessors import PreProcessor
 from processors.preprocessors.layer_parser import LayerParser
 from processors.preprocessors.processor_interface import Sections, ProcessorInterface
 
+#TODO: make this static class
 
 class Sender():
   
