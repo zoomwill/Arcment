@@ -1,20 +1,12 @@
 import requests
 import time
 from duetwebapi import DuetWebAPI
-from processors.preprocessors.preprocessors import PreProcessor
-from processors.preprocessors.layer_parser import LayerParser
-from processors.preprocessors.processor_interface import Sections, ProcessorInterface
-
+from processors import *
 class Sender:
-    def __init__(self, gcode):
-        self.gcode = gcode
+    def __init__(self):
         self.duet_ip = "169.254.1.2"
         self.printer = DuetWebAPI(self.duet_ip)
         self.printer.connect(password='reprap')
-        
-        # Parse the G-code into layers
-        self.preprocessor = PreProcessor(self.gcode)
-        self.layers = self.preprocessor.parse_layers()
     
     def send_code_line(self, code_line):
         """Send a single line of gcode to the printer and wait until idle."""
@@ -51,7 +43,7 @@ class Sender:
     
     def get_current_position(self):
         return self.printer.get_model(key="move.axes[].machinePosition")
-      
+    
 if __name__ == "__main__":
     sender = Sender("test2.gcode")
     

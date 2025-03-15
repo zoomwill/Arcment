@@ -1,7 +1,6 @@
 from typing import List
 from collections import defaultdict
-from .layer_parser import LayerParser
-from .processor_interface import Sections, ProcessorInterface
+from PreProcessors import *
 
 class PreProcessor():
   
@@ -12,8 +11,6 @@ class PreProcessor():
     with open(gcode, 'r', encoding='utf-8', errors='replace') as f:
       for line in f:
         self.gcode.append(line.strip())
-    
-    print(len(self.gcode))
       
     self.sections = [Sections.TOP_COMMENT_SECTION,
                     Sections.STARTUP_SCRIPT_SECTION,
